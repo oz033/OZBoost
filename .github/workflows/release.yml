@@ -1,0 +1,55 @@
+# Manual GitHub Release helper.
+# Create a tag v1.0.5 and publish artifacts from CI (requires repo secrets if signing).
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build (e.g. v1.0.5)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: OZDebloat/package-lock.json
+
+      - name: Install & build portable
+        working-directory: OZDebloat
+        run: |
+          npm ci
+          npm run dist:portable
+
+      - name: Upload portable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OZBoost-portable
+          path: OZDebloat/release/*-portable.exe
+
+      - name: Create GitHub Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: OZDebloat/release/*-portable.exe
+          generate_release_notes: true
+          body_path: OZDebloat/CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,59 @@
+appId: com.oz033.ozboost
+productName: OZBoost
+copyright: Copyright © 2026 oz033
+
+directories:
+  output: release
+  buildResources: build
+
+# App-Icon (build/icon.ico + icon.png)
+icon: build/icon.png
+
+# asar wird für Electron + JS-Module genutzt, ABER die PowerShell-Skripte
+# müssen außerhalb von asar liegen, weil PowerShell nicht aus dem virtuellen
+# asar-Dateisystem lesen kann (→ ENOENT beim Spawn).
+asar: true
+asarUnpack:
+  - scripts/**
+
+files:
+  - dist/renderer/**/*
+  - electron/**/*
+  - scripts/**/*
+  - build/icon.*
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+
+extraResources:
+  - from: build/icon.ico
+    to: icon.ico
+
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  artifactName: ${productName}-${version}-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: OZBoost
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+
+portable:
+  artifactName: ${productName}-${version}-portable.${ext}
+
+# electron-updater: set your real GitHub repo when publishing releases
+publish:
+  provider: github
+  owner: oz033
+  repo: ozboost
+  releaseType: release

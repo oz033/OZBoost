@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Strict CSP: renderer is local-only, no remote content. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+    <title>OZBoost</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="ozb-error" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;padding:16px;max-height:300px;overflow:auto;z-index:9999;"></div>
+    <script type="module" src="./main.jsx"></script>
+  </body>
+</html>

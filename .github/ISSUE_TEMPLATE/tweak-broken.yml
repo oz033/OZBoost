@@ -1,0 +1,74 @@
+name: Tweak broken after Windows update
+description: A specific optimization fails, reverts, or breaks something after a Windows build change
+title: "[tweak] "
+labels: ["tweak", "windows-update"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please fill every section so we can reproduce on a clean machine.
+  - type: input
+    id: ozboost-version
+    attributes:
+      label: OZBoost version
+      placeholder: "1.0.3"
+    validations:
+      required: true
+  - type: input
+    id: windows-build
+    attributes:
+      label: Windows version / build
+      description: Settings → System → About, or `winver`
+      placeholder: "Windows 11 24H2 (26100.xxxx)"
+    validations:
+      required: true
+  - type: input
+    id: tweak-id
+    attributes:
+      label: Tweak id or title
+      description: Exact name from the package list / Tools card
+      placeholder: "mpo_off / Core Isolation …"
+    validations:
+      required: true
+  - type: dropdown
+    id: intensity
+    attributes:
+      label: Intensity / mode
+      options:
+        - Safe
+        - Strong
+        - Max
+        - Tools / single apply
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should happen
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happens
+      description: Error text, skipped reason, broken Windows feature, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Fresh scan
+        2. Select …
+        3. Apply
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checks
+      options:
+        - label: I created a restore point / can roll back
+        - label: I can share a redacted log excerpt if asked
